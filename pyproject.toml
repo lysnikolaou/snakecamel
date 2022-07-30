@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "snakecamel"
+version = "0.1.0"
+description = "An easy-to-use package to convert to camelCase or snake_case"
+authors = ["Lysandros Nikolaou <lisandrosnik@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1"
+black = "^22.6.0"
+pytest-cov = "^3.0.0"
+mypy = "^0.971"
+pre-commit = "^2.20.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.10"
+files = ["snakecamel", "tests"]
+
+[tool.black]
+line-length = "100"
+target_version = ["py310"]
+
+[tool.pycln]
+all = true
+
+[tool.isort]
+profile = "black"
+line_length = 100
