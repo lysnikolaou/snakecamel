@@ -4,7 +4,7 @@ import typing
 
 def _camelize_string(s: str, capitalized: bool = False, strip_underscores: bool = False) -> str:
     if not isinstance(s, str):
-        raise ValueError(f"Value {s} is not a string")
+        assert False, f"'s' should always be a string, but value {s} is not"
 
     if not s:
         return s
@@ -12,14 +12,20 @@ def _camelize_string(s: str, capitalized: bool = False, strip_underscores: bool 
     s = s.strip(" _" if strip_underscores else " ")
     if capitalized:
         s = f"{s[0].upper()}{s[1:]}"
-    return re.sub(r"[_.-](\w|$)", lambda mo: mo.group(1).upper(), s)
+
+    # Explanation:
+    # _(?P<after>[A-Za-z0-9]: Matches any underscore followed by a word character (letter or digit)
+    # (?!^): Makes sure this is not at the beginning of the word since _simple_string should become _simpleString
+    # (stripping initial undersocres is handled above)
+    new = re.sub(r"(?!^)_(?P<after>[A-Za-z0-9])", lambda mo: mo.group("after").upper(), s)
+    return type(s)(new)
 
 
 def _camelize_other_iterable(
     iterable: typing.Iterable, capitalized: bool, strip_underscores: bool = False
-) -> list:
+) -> typing.Iterable:
     if not isinstance(iterable, typing.Iterable):
-        raise ValueError(f"Value {iterable} is not iterable")
+        assert False, f"'iterable' should always be an iterable, but value {iterable} is not"
 
     new: list = []
     for item in iterable:
@@ -31,7 +37,7 @@ def _camelize_other_iterable(
             new.append(_camelize_other_iterable(item, capitalized, strip_underscores))
         else:
             new.append(item)
-    return new
+    return type(iterable)(new)  # type: ignore
 
 
 def _camelize_mapping(
@@ -41,7 +47,7 @@ def _camelize_mapping(
     camelize_mapping_values: bool = False,
 ) -> dict:
     if not isinstance(mapping, typing.Mapping):
-        raise ValueError(f"Value {mapping} is not a mapping")
+        assert False, f"'mapping' should always be a mapping, but value {mapping} is not"
 
     new: dict = {}
     for key, value in mapping.items():
