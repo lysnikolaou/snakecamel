@@ -1,0 +1,31 @@
+name: Test - pytest
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install poetry
+      run: pipx install poetry
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'poetry'
+    - name: Install dependencies
+      run: |
+        poetry env use "3.10"
+        poetry install
+    - name: Run tests
+      run: |
+        poetry env use "3.10"
+        poetry run pytest --cov=snakecamel --cov=tests --cov-report=xml
+    - name: Upload coverage report to codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
