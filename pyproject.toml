@@ -24,7 +24,7 @@ python = "^3.10"
 pytest = "^7.1"
 black = "^22.6.0"
 pytest-cov = "^3.0.0"
-mypy = "^0.971"
+mypy = "^1.0"
 pre-commit = "^2.20.0"
 
 [build-system]
